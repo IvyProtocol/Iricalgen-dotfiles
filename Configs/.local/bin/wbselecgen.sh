@@ -77,10 +77,8 @@ apply_wallpaper() {
 
     # Generate Rofi .rasi file for background blur
     echo "* { current-image: url(\"$blurred\", height); }" > "$rasifile" &
-   
-    # Symlink Wallpaper to wlogout and Rofi
-    ln -sf "$blurred" "${confDir}/wlogout/wallpaper_blurred.png" &
-    ln -sf "$img" "${confDir}/rofi/shared/current-wallpaper.png" &
+    magick "$blurred" "${confDir}/wlogout/wallpaper_blurred.png" &
+    magick "$img" "${confDir}/rofi/shared/current-wallpaper.png" &
 
         local notif_file="/tmp/.wallbash_notif_id"
     local notif_id=""
