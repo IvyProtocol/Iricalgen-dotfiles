@@ -63,7 +63,6 @@ apply_wallpaper() {
 
     autoD=(
         "$localDir/bin/ivy-shell.sh \"$img\""
-        "matugen image \"$img\""
     )
     export img
     export HOME
