@@ -23,20 +23,18 @@ xf86-video-ati
 cpupower
 brightnessctl
 
-
 hyprland
 hyprlock
 hypridle
 sddm
 waybar
 xdg-desktop-portal-hyprland
-xdg-desktop-portal-wlr
-xdg-desktop-portal-kde
-polkit-kde-agent
+xdg-desktop-portal-gtk
+xdg-user-dirs
+polkit-gnome
 wlogout
 kxmlgui5
 adw-gtk-theme
-
 
 bluez-utils
 bluetui
@@ -69,7 +67,6 @@ btop
 inotify-tools
 jq
 matugen
-cmatrix
 cpio
 file-roller
 ncdu
@@ -81,8 +78,6 @@ wl-screenrec
 cliphist
 cdrtools
 nvim
-nano
-gopreload-git
 imagemagick
 qt6-imageformats
 qt6-wayland
@@ -90,11 +85,9 @@ python-pywalfox
 smartmontools
 swww
 
-
 fish
 starship
 fastfetch
-
 
 firefox
 vscodium
@@ -105,6 +98,7 @@ vesktop
 loupe
 kvantum
 qt6ct-kde
+kde-cli-tools
 nwg-look
 gnome-disk-utility
 gnome-system-monitor
