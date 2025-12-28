@@ -81,7 +81,7 @@ apply_wallpaper() {
     fi
     
     echo "* { current-image: url(\"$blurred\", height); }" > "$rasifile" &
-    magick "$blurred" "${confDir}/wlogout/wallpaper_blurred.png" &
+    cp "$blurred" "${confDir}/wlogout/wallpaper_blurred.png" &
     cp "$img" "${confDir}/rofi/shared/current-wallpaper.png" &
 
     if [[ -n "$notif_id" ]]; then
