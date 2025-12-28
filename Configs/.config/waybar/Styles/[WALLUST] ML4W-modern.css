@@ -1,7 +1,7 @@
 /* ---- 💫 https://github.com/JaKooLit 💫 ---- */
 /*  ml4w-modern */
 
-@import '../../.cache/wal/colors-waybar.css';
+@import 'theme.css';
 
 @define-color backgroundlight @color0;
 @define-color backgrounddark @color12;
