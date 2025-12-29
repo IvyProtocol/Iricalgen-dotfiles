@@ -11,8 +11,7 @@ if ! pgrep -x "swww-daemon" >/dev/null; then
 fi
 
 if [[ ! -f "$flag" ]]; then
-  default="$HOME/Pictures/wallpapers/1 rain_world.png"
-  $scrDir/wbselecgen.sh "$default"
+  ${localDir}/bin/wbsecrandom.sh >/dev/null 2>&1
   touch "$flag"
 fi
 
