@@ -21,17 +21,10 @@
 	"margin-right": 0,
 	
 	"modules-left": [
-		"custom/separator#blank",
-		"custom/cava_mviz",
-		"custom/separator#blank",
 		"custom/playerctl",
 		],
 	
 	"modules-center": [
-		"group/app_drawer",
-		"custom/separator#blank",
-		"group/notify",
-		"custom/separator#dot-line",
 		"hyprland/workspaces#rw",
 		"clock",
 		"custom/separator#dot-line",
