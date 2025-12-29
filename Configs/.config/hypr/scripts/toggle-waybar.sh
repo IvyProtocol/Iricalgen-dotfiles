@@ -2,7 +2,7 @@
 
 if pgrep -x "waybar" > /dev/null; then
     {
-        pkill waybar
+        pkill waybar &
         swaync-client -rs &
         waybar & disown 
     } >/dev/null 2>&1
