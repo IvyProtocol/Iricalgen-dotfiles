@@ -243,14 +243,7 @@ if [[ -d $configDir ]]; then
             mkdir -p "${backupconf}" 
             mv "${confpath}" "${backupconf}/${conf}-backup-${backupDir}"
             echo -e " :: ${indentNotice} Backed up ${conf} to ${backupconf}/${conf}-backup-${backupDir}"
-            
-            if [[ $(stat -c '%U' ${configDir}) = $USER ]]; then
-              echo -e " :: ${indentOk} Populating ${confDir}"
-              ${scrDir}/dircaller.sh --all ${homDir}/ 
-            elif [[ $(stat -c '%u' ${configDir}) -eq 0 ]]; then
-              echo -e " :: ${indentError} The directory is owned by ${indentWarning}root! ${indentWarning}${exitCode1}${indentWarning}!"
-              exit 1
-            fi
+            backupConfir=1
             break
             ;;
           N|n)
@@ -269,12 +262,20 @@ if [[ -d $configDir ]]; then
         echo -e " :: ${indentOk} Populating ${confDir}"
         ${scrDir}/dircaller.sh --all ${homDir}/
       elif [[ $(stat -c '%u' ${configDir}) -eq 0 ]]; then
-        echo -e " :: ${indentError} The directory is owned by ${indentWarning}root!${indentYellow} ${indentWarning}${editCode1}${indentWarning}!"
+        echo -e " :: ${indentError} The directory is owned by ${indentWarning}root!${indentYellow} ${indentWarning}${exitCode1}${indentWarning}!"
         exit 1
       fi
       continue
     fi
   done
+  if [[ $backupConfir -eq 1 ]]; then
+    if [[ $(stat -c '%U' ${confDir}) = $USER ]]; then
+      echo -e " :: ${indentOk} Populating ${confDir}"
+      ${scrDir}/dircaller.sh --all ${homDir}/
+    elif [[ $(stat -c '%u' ${configDir}) -eq 0 ]]; then
+      echo -e " :: ${indentError} The directory is owned by ${indentWarning}root!${indentYellow} ${indentWarning}${exitCode1}${indentWarning}!"
+    fi
+  fi
   tar -xvf "${sourceDir}/Sweet-cursors.tar.xz" -C "${homDir}/.icons"
   if [[ ! -e "${confDir}/gtk-4.0/assets" ]] || [[ ! -e "${confDir}/gtk-4.0/gtk-dark.css" ]] || [[ -L "${confDir}/gtk-4.0/assets" ]] || [[ -L "${confDir}/gtk-4.0/gtk-dark.css" ]]; then
     ln -sf /usr/share/themes/adw-gtk3/assets "${confDir}/gtk-4.0/assets" 2>&1
@@ -334,7 +335,9 @@ if [[ -d $configDir ]]; then
       ;;
 
     N|n)
-      prompt_timer 120 "${indentAction} Would you like to pull from another repository? [Drop the full clone link or say --skip to avoid"
+      
+      prompt_timer 120 "${indentAction} Would you like to pull from another repository?"
+      echo -e " :: ${indectInfo} Use --skip to use preinstalled wallpaper, or write a repository here e.g: https://github.com/IvyProtocol/Ivy-wallpapers.git."
       case $PROMPT_INPUT in
         "")
           echo -e " :: ${indentError} No Link was given. ${indentReset}"
