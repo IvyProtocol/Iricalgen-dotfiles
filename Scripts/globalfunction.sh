@@ -11,6 +11,7 @@ export configDir="${XDG_CONFIGDIR_HOME:-${scrDir}}/../Configs/"
 export localDir="${XDG_LOCAL_DIR:-${homDir}}/.local/bin/"
 export sourceDir="${XDG_SOURCE_DIR:-${scrDir}}/../Source"
 export walDir="${XDG_WALDIR_HOME:-${homDir}}/Pictures/wallpapers"
+export hyprDir="${XDG_HYPRDIR_HOME:-${confDir}/hypr}/hyprland"
 
 export aurRp="yay-bin"
 export cachyRp="cachyos-repo.tar.xz"
@@ -24,12 +25,15 @@ export indentInfo="$(tput setaf 4)[INFO]$(tput sgr0)"
 export indentReset="$(tput setaf 5)[RESET]$(tput sgr0)"
 export indentAction="$(tput setaf 6)[ACTION]$(tput sgr0)"
 export indentWarning="$(tput setaf 1)"
+export exitCode1="$(tput setaf 1)[EXIT-CODE-1]$(tput sgr0)"
+export exitCode0="$(tput setaf 2)[EXIT-CODE-0]$(tput sgr0)"
 
 export indentMagenta="$(tput setaf 5)"
 export indentYellow="$(tput setaf 3)"
 export indentOrange="$(tput setaf 214)"
 export indentGreen="$(tput setaf 2)"
 export indentBlue="$(tput setaf 4)"
+export indentSkyBlue="$(tput setaf 6)"
 
 print_color() {
   printf "%b%sb\n" "$1" "$2" "${indentReset}"
@@ -62,18 +66,30 @@ fi
 install_package() {
   for pkg in "$@"; do
     if $ISAUR -Q "$pkg" &>/dev/null; then
-      echo -e "${indentAction} $pkg is already installed. Skipping..."
+      echo -e " :: ${indentAction} $pkg is already installed. Skipping..."
       continue
     fi
 
     ($ISAUR -S --noconfirm "$pkg") &
     PID=$!
     if $ISAUR -Q "$pkg" &>/dev/null; then
-      echo -e "${indentOk} Package $pkg installed successfully!"
+      echo -e " :: ${indentOk} Package $pkg installed successfully!"
     else
-      echo -e "${indentError} Package $pkg failed"
+      echo -e " :: ${indentError} Package $pkg failed"
     fi
   done
+}
+
+update_editor() {
+  local editor=$1
+  sed -i "s/env=EDITOR,.*/env = EDITOR,$editor/" ${hyprDir}/env.conf
+  echo "${indentOk} Default editor set to ${indentMagenta}$editor${indentReset}." 2>&1
+}
+
+get_backup_dirname() {
+  local timestamp
+  timestamp$(data +"%m%d_%H%M")
+  echo "back-up_${timestamp}"
 }
 
 prompt_timer() {
