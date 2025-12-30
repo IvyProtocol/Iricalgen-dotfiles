@@ -88,7 +88,7 @@ update_editor() {
 
 get_backup_dirname() {
   local timestamp
-  timestamp$(data +"%m%d_%H%M")
+  timestamp=$(data +"%m%d_%H%M")
   echo "back-up_${timestamp}"
 }
 
