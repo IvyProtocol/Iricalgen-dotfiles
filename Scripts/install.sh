@@ -36,59 +36,6 @@ if grep -iqE '(ID|ID_LIKE)=.*(arch)' /etc/os-release >/dev/null 2>&1; then
   done
 fi
 
-if [[ -d "${cloneDir}/${aurRp}" ]]; then
-  echo -n "${indentAction} AUR exists '${cloneDir}/${aurRp}'...."
-  while true; do
-    prompt_timer 120 "${indentAction} Do you want to remove the directory? "
-    case $PROMPT_INPUT in
-      Y|y)
-        if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
-          echo -n " :: ${indentAction} Removing..."
-          rm -rf "${cloneDir}/${aurRp}"
-          break
-        elif [[ $(stat -c '%u' ${cloneDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%u' ${cloneDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
-          echo " :: ${indentWarning} The file has ${indentWarning}root${indentWarning} ownership!!! Manual intervention required - ${exitCode1}"
-        fi
-        ;;
-      N|n)
-        prompt_timer 120 "${indentAction} !!!? Would you like to use that folder instead?"
-        case $PROMPT_INPUT in
-          Y|y)
-            if [[ -e "${cloneDir}/${aurRp}/PKGBUILD" ]]; then
-              (cd "${cloneDir}/${aurRp}/" && makepkg -si)
-              break
-            else
-              echo "${indentWarning} !!! Something went ${indentWarning}wrong${indentWarning} in our side..."
-              if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
-                echo " :: ${indentAction} Retrying the script"
-              elif [[ $(stat -c '%u' ${confDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%u' ${confDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
-                echo " :: ${indentInfo} The folder has ${indentWarning}root${indentWarning} ownership. Manual intervention required - ${exitCode1}"
-                exit 1
-              fi
-            fi
-            ;;
-          N|n)
-            if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
-              echo " :: ${indentAction} Removing..."
-              rm -rf "${cloneDir}/${aurRp}"
-              break
-            elif [[ $(stat -c '%u' ${cloneDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
-              echo " :: ${indentError} The file has ${indentWarning}root${indentWarning} ownership!!! ${exitCode1}"
-            fi
-            ;;
-          *)
-            echo " :: ${indentError} Please answer 'y' or 'n'."
-            ;;
-        esac
-        ;;
-      *)
-        echo " :: ${IndentError} Please answer 'y' or 'n'."
-        ;;
-    esac
-  done
-else
-  mkdir -p "${cloneDir}"
-fi
 
 if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
   while true; do
@@ -147,6 +94,7 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
       prompt_timer 120 "${indentNotice} Would you like to get cachyos-repository? "
       case "$PROMPT_INPUT" in
         y|Y)
+		  mkdir -p "${cloneDir}"
           curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}"
           tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}"
           sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh"
@@ -162,23 +110,78 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
   done
 fi
 
-if [[ $check = "Y" ]] || [[ $check = "y" ]]; then
-  prompt_timer 120 "${indentAction} Would you like to install yay?"
+if [[ -d "${cloneDir}/${aurRp}" ]]; then
+  echo -n "${indentAction} AUR exists '${cloneDir}/${aurRp}'...."
+  while true; do
+    prompt_timer 120 "${indentAction} Do you want to remove the directory? "
+    case $PROMPT_INPUT in
+      Y|y)
+        if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
+          echo -n " :: ${indentAction} Removing..."
+          rm -rf "${cloneDir}/${aurRp}"
+          break
+        elif [[ $(stat -c '%u' ${cloneDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%u' ${cloneDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
+          echo " :: ${indentWarning} The file has ${indentWarning}root${indentWarning} ownership!!! Manual intervention required - ${exitCode1}"
+        fi
+        ;;
+      N|n)
+        prompt_timer 120 "${indentAction} !!!? Would you like to use that folder instead?"
+        case $PROMPT_INPUT in
+          Y|y)
+            if [[ -e "${cloneDir}/${aurRp}/PKGBUILD" ]]; then
+              (cd "${cloneDir}/${aurRp}/" && makepkg -si)
+              break
+            else
+              echo "${indentWarning} !!! Something went ${indentWarning}wrong${indentWarning} in our side..."
+              if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
+                echo " :: ${indentAction} Retrying the script"
+              elif [[ $(stat -c '%u' ${confDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%u' ${confDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
+                echo " :: ${indentInfo} The folder has ${indentWarning}root${indentWarning} ownership. Manual intervention required - ${exitCode1}"
+                exit 1
+              fi
+            fi
+            ;;
+          N|n)
+            if [[ $(stat -c '%U' ${cloneDir}/${aurRp}) = $USER ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) = $USER ]]; then
+              echo " :: ${indentAction} Removing..."
+              rm -rf "${cloneDir}/${aurRp}"
+              break
+            elif [[ $(stat -c '%u' ${cloneDir}/${aurRp}) -eq 0 ]] && [[ $(stat -c '%U' ${cloneDir}/${aurRp}/PKGBUILD) -eq 0 ]]; then
+              echo " :: ${indentError} The file has ${indentWarning}root${indentWarning} ownership!!! ${exitCode1}"
+            fi
+            ;;
+          *)
+            echo " :: ${indentError} Please answer 'y' or 'n'."
+            ;;
+        esac
+        ;;
+      *)
+        echo " :: ${IndentError} Please answer 'y' or 'n'."
+        ;;
+    esac
+  done
+else
+  mkdir -p "${cloneDir}"
+  if [[ $check = "Y" ]] || [[ $check = "y" ]]; then
+    prompt_timer 120 "${indentAction} Would you like to install yay?"
 
-  case "$PROMPT_INPUT" in
-    [Yy]*)
-      git clone "https://aur.archlinux.org/${aurRp}.git" "${cloneDir}/${aurRp}" 
-      var=$(stat -c '%U' "${cloneDir}/${aurRp}")
-      var1=$(stat -c '%U' "${cloneDir}/${aurRp}/PKGBUILD")
+    case "$PROMPT_INPUT" in
+      [Yy]*)
+        git clone "https://aur.archlinux.org/${aurRp}.git" "${cloneDir}/${aurRp}" 
+        var=$(stat -c '%U' "${cloneDir}/${aurRp}")
+        var1=$(stat -c '%U' "${cloneDir}/${aurRp}/PKGBUILD")
 
-      if [[ $var = "$USER" ]] && [[ $var1 = "$USER" ]]; then
-        (cd "${cloneDir}/${aurRp}/" && makepkg -si)
-      fi
-      ;;
-    [Nn]*|""|*)
-      echo " :: ${indentReset} Aborting Installation due to user preference. ${aurRp} wasn't ${indentOrange}installed${indentOrange} ${exitCode0}."
-      ;;
-  esac
+        if [[ $var = "$USER" ]] && [[ $var1 = "$USER" ]]; then
+          (cd "${cloneDir}/${aurRp}/" && makepkg -si)
+        fi
+        ;;
+      [Nn]*|""|*)
+        echo " :: ${indentReset} Aborting Installation due to user preference. ${aurRp} wasn't ${indentOrange}installed${indentOrange} ${exitCode0}."
+        echo -e " :: ${indentInfo} The installation will not happen if ${aurRp} is not installed. ${exitCode0}"
+        exit 0
+        ;;
+    esac
+  fi
 fi
 
 if [[ $check = "Y" ]] || [[ $check = "y" ]]; then
