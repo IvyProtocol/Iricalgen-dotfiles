@@ -27,15 +27,11 @@ To install, clone this repository to any directory:
 sudo pacman -S --needed git base-devel
 git clone --depth 1 https://github.com/IvyProtocol/IDE.git ~/IDE
 cd ~/IDE/Scripts/
-yay -Syu --needed - < pkgs.sh
-cp -r $(rpDir)/Configs/.config $HOME/.config
-cp -r $(rpDir)/Configs/.icons $HOME/.icons
-cp -r $(rpDir)/Configs/.local $HOME/.local
-tar -xf ~/IDE/Source/Sweet-cursors.tar.xz -C ~/.icons/
+./install.sh
 ```
 
 > [!WARNING]
-> These commands will overwrite existing files in ~/.config, ~/.local and ~/.icons. 
+> The install script will create backup and overwrite files in ~/.config, ~/.local and ~/.icons. Be cautious, we are not responsible.
 
 Please reboot the system after the step has been taken and takes you to SDDM login screen for the first time.
 
@@ -48,10 +44,18 @@ Iricalgen-dotfiles/ <-------- $(rpDir)
 ├── LICENSE
 ├── README.md
 ├── Scripts
-│   └── pkgs.sh
+│   ├── dircaller.sh
+│   ├── globalfunction.sh
+│   ├── install.sh
+│   └── pkgs-core.sh
 └── Source < ----- Extra Sources
     ├── assets
-    │   └── irgen.gif
+    │   ├── irgen.gif
+    │   ├──  1_rain_world.png
+    │   ├──  2_rain_world.png
+    │   ├──  3_rain_world.png
+    │   ├──  arcade_decay_red.png
+    │   └── rain_girl_door.jpg
     ├── Code_Wallbash.vsix
     ├── Icon_Vivid-Glassy-Dark.tar.gz
     └── Sweet-cursors.tar.xz
