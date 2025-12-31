@@ -70,7 +70,7 @@ install_package() {
       continue
     fi
 
-    ($ISAUR -S --noconfirm "$pkg") &
+    ($ISAUR -S --noconfirm "$pkg") 2>&1
     PID=$!
     if $ISAUR -Q "$pkg" &>/dev/null; then
       echo -e " :: ${indentOk} Package $pkg installed successfully!"
