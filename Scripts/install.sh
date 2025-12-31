@@ -325,7 +325,7 @@ if [[ -d $configDir ]]; then
           echo -e " :: ${indentError} Shell change failed? (incorrect passwd?) Try again."
         fi
         ;;
-      N|n|)
+      N|n)
         echo -e " :: ${indentReset} Aborting due to user preference. Keeping $(echo "$SHELL") intact."
         break
         ;;
