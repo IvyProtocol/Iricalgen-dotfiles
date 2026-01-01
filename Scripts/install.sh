@@ -176,9 +176,12 @@ else
         fi
         ;;
       [Nn]*|""|*)
-        echo " :: ${indentReset} Aborting Installation due to user preference. ${aurRp} wasn't ${indentOrange}installed${indentOrange} ${exitCode0}."
-        echo -e " :: ${indentInfo} The installation will not happen if ${aurRp} is not installed. ${exitCode0}"
-        exit 0
+        if pkg_installed "yay-bin" 2>/dev/null; then
+          echo -e " :: ${indentAction} ${aurRp} is already ${indentGreen}installed - ${exitCode0}"
+        else
+          echo " :: ${indentReset} Aborting Installation due to user preference. The installation will not begin if ${aurRp} is not installed. ${exitCode1}"
+          exit 1
+        fi
         ;;
     esac
   fi
