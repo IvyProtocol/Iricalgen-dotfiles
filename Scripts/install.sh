@@ -33,7 +33,7 @@ case $command in
     mkdir -p "${cloneDir}"
     curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}"
     tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}"
-    (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh)
+    (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh) >/dev/null 2>&1
     echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
     exit 0
     ;;
@@ -95,7 +95,7 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
           case $PROMPT_INPUT in
             y|Y)
               if [[ -e "${cloneDir}/cachyos-repo/cachyos-repo.sh" ]]; then
-                (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh)
+                (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh) >/dev/null 2>&1
                 break
               else
                 echo "${indentError} !!! Something went ${indentWarning}wrong${indentWarning} in our side..."
@@ -134,7 +134,7 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
 		  mkdir -p "${cloneDir}"
           curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}" 2>/dev/null  2>&1
           tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}" >/dev/null 2>&1
-          (cd "${cloneDir}/cachyos-repo/" && sudo ./cachyos-repo.sh) 2>/dev/null 2>&1
+          (cd "${cloneDir}/cachyos-repo/" && sudo ./cachyos-repo.sh) >/dev/null 2>&1
           echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
           break
           ;;
