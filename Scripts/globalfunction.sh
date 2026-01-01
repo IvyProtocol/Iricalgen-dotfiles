@@ -82,7 +82,7 @@ install_package() {
 update_editor() {
   local editor=$1
   sed -i "s/env=EDITOR,.*/env = EDITOR,$editor/" ${hyprDir}/env.conf
-  echo "${indentOk} Default editor set to ${indentMagenta}$editor${indentReset}." 2>&1
+  echo " :: ${indentOk} Default editor set to ${indentMagenta}$editor${indentReset}." 2>&1
 }
 
 get_backup_dirname() {
