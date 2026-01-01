@@ -16,6 +16,43 @@ if [[ $EUID -eq 0 ]]; then
   exit 1
 fi
 
+command="${1:-}"
+base="${2:-}"
+case $command in
+  --ed)
+    update_editor "$base"
+    echo -e " :: ${indentOk} - ${base} has been made default. ${exitCode0}"
+    exit 0
+    ;;
+  --ch)
+    ${pkgsRp} --"$2"
+    echo -e " :: ${indentOk} - ${2} package have been installed. ${exitCode0}"
+    exit 0
+    ;;
+  --cachyRp)
+    mkdir -p "${cloneDir}"
+    curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}"
+    tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}"
+    sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh"
+    echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
+    exit 0
+    ;;
+  --yay)
+  	if pkg_installed "yay-bin" 2>/dev/null; then
+	  echo -e " :: ${indentAction} ${aurRp} is already ${indentGreen} installed - ${exitCode0}"
+	else
+	  git clone "https://aur.archlinux.org/${aurRp}.git" "${cloneDir}/${aurRp}" 
+      var=$(stat -c '%U' "${cloneDir}/${aurRp}")
+      var1=$(stat -c '%U' "${cloneDir}/${aurRp}/PKGBUILD")
+
+      if [[ $var = "$USER" ]] && [[ $var1 = "$USER" ]]; then
+        (cd "${cloneDir}/${aurRp}/" && makepkg -si)
+      fi
+      exit 0
+	fi
+    ;;
+esac
+
 if grep -iqE '(ID|ID_LIKE)=.*(arch)' /etc/os-release >/dev/null 2>&1; then
   echo " :: ${indentOk} Arch Linux Detected"
   while true; do
@@ -291,7 +328,7 @@ if [[ -d $configDir ]]; then
     echo -e " :: ${indentOk} GTK Symlink initialized ${indentGreen}."
   fi  
   EDITOR_SET=0
-  if command -v nvim &>/dev/null; then
+  if pkg_installed "nvim" &>/dev/null; then
     echo -e " :: ${indentInfo} ${indentMagenta}neovim${indentSkyBlue} is detected as installed"
     prompt_timer 20 "${indentAction} Do you want to make ${indentMagenta}neovim${indentSkyBlue} default?" 2>&1
     case $PROMPT_INPUT in
@@ -306,13 +343,49 @@ if [[ -d $configDir ]]; then
         echo -e " :: ${indentError} Please say 'y' or 'n'. ${exitCode1}!"
         ;;
     esac
-  elif [[ "$EDITOR_SET" -eq 0 ]] && command -v vim &>/dev/null; then
+  elif [[ "$EDITOR_SET" -eq 0 ]] && pkg_installed "vim" &>/dev/null; then
     echo -e " :: ${indentInfo} ${indentMagenta}vim${indentYellow} is detected as installed."
     prompt_timer 20 "${indentAction} Do you want to make ${indentMagenta}vim${indentGreen} default?"
     if [[ "$PROMPT_INPUT" == "Y" || "$PROMPT_INPUT" == "y" ]]; then
       update_editor "vim"
       EDITOR_SET=1
     fi
+  fi
+    if pkg_installed "cava" &>/dev/null; then
+    mkdir -p "${confDir}/cava"
+    cp "${localDir}/../state/cava.ivy" "${confDir}/ivy-shell/shell/"    
+  fi
+  if pkg_installed "vscodium" &>/dev/null; then
+    mkdir -p "${homDir}/.vscode-oss"
+    mkdir -p "${confDir}/VSCodium/User"
+    echo "
+{
+  "workbench.colorTheme": "Wallbash",
+  "window.menuBarVisibility": "toggle",
+  "editor.fontSize": 12,
+  "editor.scrollbar.vertical": "hidden",
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  "security.workspace.trust.untrustedFiles": "newWindow",
+  "security.workspace.trust.startupPrompt": "never",
+  "security.workspace.trust.enabled": false,
+  "editor.minimap.side": "left",
+  "editor.fontFamily": "'JetbrainsMono Nerd Font','Maple Mono', monospace",
+  "extensions.autoUpdate": false,
+  "workbench.statusBar.visible": false,
+  "terminal.external.linuxExec": "kitty",
+  "terminal.explorerKind": "both",
+  "terminal.sourceControlRepositoriesKind": "both",
+  "telemetry.telemetryLevel": "off",
+  "workbench.activityBar.location": "top",
+  "window.customTitleBarVisibility": "auto",
+  "workbench.sideBar.location": "right"
+}
+    " > "${confDir}/VSCodium/User/settings.json"
+    cp "${localDir}/../state/code.ivy" "${confDir}/ivy-shell/shell"
+  fi
+  if pkg_installed "vesktop" &>/dev/null; then
+    mkdir -p "${confDir}/vesktop/themes"
+    cp "${localDir}/../state/discord.ivy" "${confDir}/ivy-shell/shell/"
   fi
   while true; do
     prompt_timer 120 "${indentAction} Would you like to switch to fish?"
