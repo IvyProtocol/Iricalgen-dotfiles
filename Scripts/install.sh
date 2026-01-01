@@ -33,7 +33,7 @@ case $command in
     mkdir -p "${cloneDir}"
     curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}"
     tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}"
-    sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh"
+    (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh)
     echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
     exit 0
     ;;
@@ -95,7 +95,7 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
           case $PROMPT_INPUT in
             y|Y)
               if [[ -e "${cloneDir}/cachyos-repo/cachyos-repo.sh" ]]; then
-                sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh"
+                (cd "${cloneDir}/cachyos-repo" && sudo ./cachyos-repo.sh)
                 break
               else
                 echo "${indentError} !!! Something went ${indentWarning}wrong${indentWarning} in our side..."
@@ -134,7 +134,7 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
 		  mkdir -p "${cloneDir}"
           curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}" 2>/dev/null  2>&1
           tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}" >/dev/null 2>&1
-          sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh" 2>/dev/null 2>&1
+          (cd "${cloneDir}/cachyos-repo/" && sudo ./cachyos-repo.sh) 2>/dev/null 2>&1
           echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
           break
           ;;
@@ -213,7 +213,7 @@ else
         fi
         ;;
       [Nn]*|""|*)
-        if pkg_installed "yay-bin" 2>/dev/null; then
+        if pkg_installed "yay-bin" 2>/dev/null || pkg_installed "yay" 2>/dev/null; then
           echo -e " :: ${indentAction} ${aurRp} is already ${indentGreen}installed - ${exitCode0}"
         else
           echo " :: ${indentReset} Aborting Installation due to user preference. The installation will not begin if ${aurRp} is not installed. ${exitCode1}"
@@ -225,10 +225,6 @@ else
 fi
 
 if [[ $check = "Y" ]] || [[ $check = "y" ]]; then
-  if [[ -d "${cloneDir}/cachyos-repo" || -e "${cloneDir}/cachyos-repo/cachyos-repo.sh" ]]; then
-    sudo pacman -Syu --needed >/dev/null 2>&1
-	echo -e " :: Updated Keyring of Pacman. ${exitCode0}"
-  fi
   while true; do
     if [[ -e "${pkgsRp}" ]]; then
       if [[ $(stat -c '%U' ${pkgsRp}) = $USER ]]; then
