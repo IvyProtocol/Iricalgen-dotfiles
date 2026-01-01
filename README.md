@@ -15,11 +15,6 @@ A personal Hyprland-based desktop configuration with ivy-shell (Wallbash Fork fr
 This repository is maintained mainly for personal and prerequisite use.
 Since it actively evolves, screenshots may become outdated. If you are looking out for wallpapers, then you may head toward [REPO](https://github.com/Namelessmode/Iricalgen-wbshow.git). This repository may be deprecated in the future.
 
-> [!IMPORTANT]
-> Make sure you have AUR helper: [yay](https://github.com/Jguer/yay) installed on the system.
-> It is also recommended to get [cachyos-repository](https://wiki.cachyos.org/features/optimized_repos/) before the installation.
-
-
 ## Installation
 To install, clone this repository to any directory:
 
