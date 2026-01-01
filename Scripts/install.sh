@@ -132,9 +132,9 @@ if [[ "${check}" = "Y" ]] || [[ ${check} = "y" ]]; then
       case "$PROMPT_INPUT" in
         y|Y)
 		  mkdir -p "${cloneDir}"
-          curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}"
-          tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}"
-          sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh"
+          curl "https://mirror.cachyos.org/${cachyRp}" -o "${cloneDir}/${cachyRp}" 2>/dev/null  2>&1
+          tar xvf "${cloneDir}/${cachyRp}" -C "${cloneDir}" >/dev/null 2>&1
+          sudo bash "${cloneDir}/cachyos-repo/cachyos-repo.sh" 2>/dev/null 2>&1
           echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
           break
           ;;
@@ -166,7 +166,7 @@ if [[ -d "${cloneDir}/${aurRp}" ]]; then
         case $PROMPT_INPUT in
           Y|y)
             if [[ -e "${cloneDir}/${aurRp}/PKGBUILD" ]]; then
-              (cd "${cloneDir}/${aurRp}/" && makepkg -si)
+              (cd "${cloneDir}/${aurRp}/" && makepkg -si) >/dev/null 2>&1
               break
             else
               echo "${indentWarning} !!! Something went ${indentWarning}wrong${indentWarning} in our side..."
@@ -209,7 +209,7 @@ else
         var1=$(stat -c '%U' "${cloneDir}/${aurRp}/PKGBUILD")
 
         if [[ $var = "$USER" ]] && [[ $var1 = "$USER" ]]; then
-          (cd "${cloneDir}/${aurRp}/" && makepkg -si)
+          (cd "${cloneDir}/${aurRp}/" && makepkg -si) >/dev/null 2>&1
         fi
         ;;
       [Nn]*|""|*)
