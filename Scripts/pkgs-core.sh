@@ -127,7 +127,7 @@ case $var in
     install_package "${driver[@]}"
     ;;
   --sddm)
-    install_package "${driver[@]}"
+    install_package "${sddm[@]}"
     ;;
   *|"")
     exit 0
