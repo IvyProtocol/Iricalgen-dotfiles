@@ -430,7 +430,7 @@ if [[ -d $configDir ]]; then
         EDITOR_SET=1
         ;;
       N|n)
-        echo -e " :: ${indentNotice} Defaulting to $EDITOR, no ${indentOrange}changes${indentMagenta} were made!"
+        echo -e " :: ${indentNotice} Defaulting to $(echo "$EDITOR"), no ${indentOrange}changes${indentMagenta} were made!"
       ;;
       *)
         echo -e " :: ${indentError} Please say 'y' or 'n'. ${exitCode1}!"
@@ -454,7 +454,8 @@ if [[ -d $configDir ]]; then
 	cp "${localDir}/../state/ivy-shell/VSCodium/User/settings.json" "${confDir}/VSCodium/User"
     cp "${localDir}/../state/ivy-shell/code.ivy" "${confDir}/ivy-shell/shell"
 	if [[ -e "${sourceDir}/Code_wallbash.vsix" ]]; then
-	  unzip -l "${sourceDir}/Code_Wallbash.vsix" -d ${cloneDir}/
+	  unzip -l "${sourceDir}/Code_Wallbash.vsix"
+	  unzip -q "${sourceDir}/Code_Wallbash.vsix" -d "${cloneDir}" 
 	  mv "${cloneDir}/extension/*" "${homDir}/.vscode-oss/extensions/thehydeproject.wallbash-0.3.6/"
 	else
 	  echo -e " :: ${indentError} - Code_Wallbash.vsix doesn't exist!"
