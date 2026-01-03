@@ -457,7 +457,7 @@ if [[ -d $configDir ]]; then
 	  if [[ -e "${sourceDir}/Code_Wallbash.vsix" ]]; then
 	    unzip -l "${sourceDir}/Code_Wallbash.vsix"
 	    unzip -q "${sourceDir}/Code_Wallbash.vsix" -d "${cloneDir}" 
-	    cp ${cloneDir}/extension/* "${homDir}/.vscode-oss/extensions/thehydeproject.wallbash-0.3.6/"
+	    cp -r ${cloneDir}/extension/* "${homDir}/.vscode-oss/extensions/thehydeproject.wallbash-0.3.6/"
 	  else
 	    echo -e " :: ${indentError} - Code_Wallbash.vsix doesn't exist!"
 	  fi
@@ -496,9 +496,9 @@ if [[ -d $configDir ]]; then
         Y|y)
           set +e
           echo -e " :: ${indentNotice} Switching the shell to fish"
-		      clear
+		  clear
           chsh -s /usr/bin/fish 2>&1
-		      clear
+		  clear
           exitstatus=$?
           var1=$(getent passwd "$USER" | cut -d: -f7)
 
