@@ -190,11 +190,9 @@ if [[ "$rpcachecheck" -eq 1 ]]; then
       (cd "${cloneDir}/cachyos-repo/" && sudo ./cachyos-repo.sh)
 	  clear
       echo " :: ${indentOk} Repository has been ${indentGreen}installed${indentGreen} successfully. ${exitCode0}"
-      break
       ;;
     n|N|""|*)
       echo " :: ${indentReset} Aborting installation due to user preference. ${exitCode0}"
-      break
       ;;
   esac 
 fi
