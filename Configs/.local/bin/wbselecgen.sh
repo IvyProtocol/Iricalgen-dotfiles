@@ -14,7 +14,7 @@ mkdir -p "$BLURRED_DIR"
 ROFI_THEME="${rasiDir}/config-wallpaper.rasi"
 xtrans="any"
 wallFramerate="60"
-wallTransDuration="1"
+wallTransDuration="0.4"
 BLUR_DEFAULT="50x30"
 BLUR="$BLUR_DEFAULT"
 
@@ -61,13 +61,7 @@ apply_wallpaper() {
         echo "$notif_id" > "$notif_file"
     fi &
 
-    autoD=(
-        "$localDir/bin/ivy-shell.sh \"$img\""
-    )
-    export img
-    export HOME
-    export localDir
-    parallel ::: "${autoD[@]}" 
+    $localDir/bin/ivy-shell.sh "$img"
     swww img "$img" -t any --transition-bezier .43,1.19,1,.4 --transition-duration $wallTransDuration --transition-fps $wallFramerate --invert-y &
     wait
     if [ ! -f "$blurred" ]; then
@@ -84,10 +78,13 @@ apply_wallpaper() {
     cp "$blurred" "${confDir}/wlogout/wallpaper_blurred.png" &
     if [[ "$img" = *.jpg ]]; then
         magick "$img" "${confDir}/rofi/shared/current-wallpaper.png" &
+        cp "$img" "/usr/share/sddm/themes/silent/backgrounds/default.jpg" &
     elif [[ "$img" = *.gif ]]; then
         magick "$img[0]" "${confDir}/rofi/shared/current-wallpaper.png" &
+        cp "$img" "/usr/share/sddm/themes/silent/backgrounds/default.jpg" &
     elif [[ "$img" = *.png ]]; then
         magick "$img" "${confDir}/rofi/shared/current-wallpaper.png" &
+        cp "$img" "/usr/share/sddm/themes/silent/backgrounds/default.jpg" &
     fi
 
     if [[ -n "$notif_id" ]]; then
@@ -131,4 +128,3 @@ if [ -n "$1" ]; then
 else
     choose_wallpaper
 fi
-
