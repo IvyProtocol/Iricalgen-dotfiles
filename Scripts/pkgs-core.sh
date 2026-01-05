@@ -45,7 +45,6 @@ hyprland=(
   jq
   file-roller
   ncdu
-  parallel
   unzip
   xdotool
   wl-clip-persist
