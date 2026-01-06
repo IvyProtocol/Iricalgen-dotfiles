@@ -7,11 +7,11 @@ ivygen_cDot="${XDG_CACHE_HOME:-$HOME/.cache}/ivy-shell/shell"
 scrDir="$(dirname "$(realpath "$0")")"
 
 if [[ "$EUID" -eq 0 ]]; then
-  echo "ivy-shell must not be run as root." >&2
+  echo "'$0' must not be run as root." >&2
   exit 1
 fi
 
-if [[ -f ${OUT_DIR} ]]; then
+if [[ ! -f ${OUT_DIR} ]]; then
   mkdir -p "$OUT_DIR"
 fi
 
@@ -22,12 +22,12 @@ if [ -z "$ivygenImg" ] || [ ! -f "$ivygenImg" ]; then
   exit 2
 fi
 
-if [[ -f ${ivygen_cDot} ]]; then
+if [[ ! -f ${ivygen_cDot} ]]; then
   mkdir -p "$ivygen_cDot"
 fi
 
 if [[ ! -d "$scrDir/modules" ]]; then
-  echo "ivy-shell: modules directory missing (broken install?)" >&2
+  echo "'$0': modules directory missing (broken install?)" >&2
   exit 1
 fi
 
