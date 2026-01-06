@@ -4,7 +4,7 @@
 scrDir=$(dirname "$(realpath "$0")")
 
 if [[ ! -f "${scrDir}/globalvariable.sh" ]]; then
-    rasiScr="$HOME/.config/rofi/shared/config-clipboard.rasi"
+    rasiDir="$HOME/.config/rofi/shared/"
 else
     source "${scrDir}/globalvariable.sh"
 fi
