@@ -10,4 +10,23 @@ export rasiDir="${XDG_RTDIR_HOME:-${confDir}/rofi/shared}"
 export wlDir="${XDG_WLDIR_HOME:-${confDir}/waybar/Styles}"
 export wcDir="${XDG_WCDIR_HOME:-${confDir}/waybar/}"
 export hyprscrDir="${XDG_WBSCRDIR_HOME:-${confDir}/hypr/scripts}"
+export themeDir="${XDG_THEME_CONF:-${confDir}/ivy-shell}/themes"
 
+pkg_installed() {
+  local PkgIn=$1
+
+  if pacman -Q "${PkgIn}" &>/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+pkg_available() {
+  local PkgIn=$1
+  if pacman -Ss "${PkgIn}" &>/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
