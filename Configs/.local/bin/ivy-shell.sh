@@ -291,6 +291,7 @@ case "$VAR2" in
   --theme-helper)
     $scrDir/modules/ivyshell-helper.sh
     exit 0
+    ;;
   *)
     $scrDir/modules/ivyshell-theme.sh &
     $scrDir/modules/ivyshell-helper.sh
